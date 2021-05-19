@@ -176,7 +176,7 @@ def startto():
     print("Dividend     : " + getDividend + "%")
     print("Bonus        : " + getBonus + "%")
     print("Right Share  : " + getRShare)
-    print("120 Average  : " + getAverage)
+  #  print("120 Average  : " + getAverage)
     print("Data Insesrted")
 
 if __name__ == "__main__":
