@@ -27,7 +27,9 @@ def startto():
     # Gets the recent market price of the company
     marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
 
-
+    #Gets the company's symbol 
+    symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
+    # print(symbol)
 
     #EPS of the company 
     getEps = ""
@@ -165,10 +167,11 @@ def startto():
     #     getAverage = getAverage + i
     # # print(getSector)
 
-    scripInsert =[companyName, getSector, marketPrice, getEps, getPE, getDividend, getBonus, getRShare, "UnderConstruction"]
+    scripInsert =[companyName, symbol, getSector, marketPrice, getEps, getPE, getDividend, getBonus, getRShare, "UnderConstruction"]
     worksheet.append_row(scripInsert)
 
     print("Company name : " + companyName)
+    print("Symbol       : " + symbol)
     print("Sector       : " + getSector)
     print("Market Price : " + marketPrice)
     print("EPS          : " + getEps)
