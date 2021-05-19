@@ -179,6 +179,13 @@ def startto():
   #  print("120 Average  : " + getAverage)
     print("Data Insesrted")
 
+
+    #Searches the row for given symbol
+    # test = worksheet.col_values(2)
+    # rownum = test.index(symbol) + 1
+    # row = worksheet.row_values(rownum) 
+    # worksheet.update
+
 if __name__ == "__main__":
     while True:
         startto()
