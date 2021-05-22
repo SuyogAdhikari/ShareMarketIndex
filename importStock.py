@@ -45,7 +45,6 @@ def starto():
 
     #Gets the company's symbol 
     symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
-    # print(symbol)
 
     sectorValue = getValue("Sector", dataTable)
     epsValue = getValue("EPS", dataTable)
