@@ -26,62 +26,78 @@ def getValue(rowName, dataTable):
     return value
 
 def starto():
-    scrip = input("Enter your Scrip : ")
+    companiesUrl = "http://merolagani.com/LatestMarket.aspx"
+    req = requests.get(companiesUrl, headers = headers)
+    companySoup = BeautifulSoup(req.text, 'html.parser')
+
+    #retrieve companies
+    companyDataTable = companySoup.find('table', {'data-live' : 'live-trading'})
+
+    with open("companies.txt", 'w') as file:
+        tbody = companyDataTable.find('tbody')
+        for a in tbody.find_all('a', {'target' : '_blank'}):
+            file.write(a.text + "\n")
+
+    myCompanies = list()
+    with open("companies.txt", 'r') as file:
+        data = file.read()
+        myCompanies.append(data.split())
+
+    count = 0
+    for companies in myCompanies:
+        for scrip in companies:
+            url = "https://merolagani.com/CompanyDetail.aspx?symbol=" + scrip
+            r = requests.get(url, headers = headers)
+            soup = BeautifulSoup(r.text, 'html.parser')
+
+            # Gets Company Name from MeroLagani website and selects the table on the left side that has the company's share details
+            companyName = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_companyName'}).text
+
+            #finds the data table where the needed informations are stored in
+            dataTable = soup.find('table', {'id' : 'accordion'})
 
 
-    url = "https://merolagani.com/CompanyDetail.aspx?symbol=" + scrip
-    r = requests.get(url, headers = headers)
-    soup = BeautifulSoup(r.text, 'html.parser')
+            # Gets the recent market price of the company
+            marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
 
-    # Gets Company Name from MeroLagani website and selects the table on the left side that has the company's share details
-    companyName = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_companyName'}).text
+            #Gets the company's symbol 
+            symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
 
-    #finds the data table where the needed informations are stored in
-    dataTable = soup.find('table', {'id' : 'accordion'})
+            sectorValue = getValue("Sector", dataTable)
+            epsValue = getValue("EPS", dataTable)
+            peValue = getValue("P/E Ratio", dataTable)
+            percentageChangeValue = getValue("% Change", dataTable)
+            dividendValue = getValue("% Dividend", dataTable)
+            bonusValue = getValue("% Bonus", dataTable)
+            rightShareValue = getValue("Right Share", dataTable)
+            averageValue = getValue("120 Day Average", dataTable)
 
-
-    # Gets the recent market price of the company
-    marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
-
-    #Gets the company's symbol 
-    symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
-
-    sectorValue = getValue("Sector", dataTable)
-    epsValue = getValue("EPS", dataTable)
-    peValue = getValue("P/E Ratio", dataTable)
-    percentageChangeValue = getValue("% Change", dataTable)
-    dividendValue = getValue("% Dividend", dataTable)
-    bonusValue = getValue("% Bonus", dataTable)
-    rightShareValue = getValue("Righ Share", dataTable)
-    averageValue = getValue("120 Day Average", dataTable)
-
-
-
-    # scripInsert =[companyName, symbol, getSector, marketPrice, getEps, getPE, getDividend, getBonus, getRShare, "UnderConstruction"]
-    # worksheet.append_row(scripInsert)
-
-    print("Company name : " + companyName)
-    print("Symbol       : " + symbol)
-    print("Sector       : " + sectorValue)
-    print("Market Price : " + marketPrice)
-    print("EPS          : " + epsValue)
-    print("P/E          : " + peValue)
-    print("Dividend     : " + dividendValue + "%")
-    print("Bonus        : " + bonusValue + "%")
-    print("Right Share  : " + rightShareValue)
-    print("120 Average  : " + averageValue)
-    print("Data Insesrted")
+            '''Inserts into google sheet'''
+            scripInsert =[companyName, symbol, sectorValue, marketPrice, epsValue, peValue, dividendValue, bonusValue, rightShareValue, averageValue]
+            worksheet.append_row(scripInsert)
+            count += 1
+            print(count, ". Company name : " + companyName)
+            # print("Symbol       : " + symbol)
+            # print("Sector       : " + sectorValue)
+            # print("Market Price : " + marketPrice)
+            # print("EPS          : " + epsValue)
+            # print("P/E          : " + peValue)
+            # print("Dividend     : " + dividendValue + "%")
+            # print("Bonus        : " + bonusValue + "%")
+            # print("Right Share  : " + rightShareValue)
+            # print("120 Average  : " + averageValue)
+            # print("Data Insesrted")
 
 
-    #Searches the row for given symbol
-    # test = worksheet.col_values(2)
-    # rownum = test.index(symbol) + 1
-    # row = worksheet.row_values(rownum) 
-    # worksheet.update
+            #Searches the row for given symbol
+            # test = worksheet.col_values(2)
+            # rownum = test.index(symbol) + 1
+            # row = worksheet.row_values(rownum) 
+            # worksheet.update
 
 if __name__ == "__main__":
     while True:
         starto()
-        wantToExit = input("Add another company? y/n? : ")
+        wantToExit = input("Run Again? y/n? : ")
         if(wantToExit.lower() == 'n'):
             break
