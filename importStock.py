@@ -9,7 +9,23 @@ gc = gspread.service_account(filename='credentials.json')
 sh = gc.open_by_key('1PtkNfz_youMtW7DQ5meMZNJGJ0aMz8V_wINLceilTjo')
 worksheet = sh.sheet1
 
-def startto():
+def getValue(rowName, dataTable):
+    value = ""
+    mylist = list()
+    for tbody in dataTable.find_all('tbody'):
+        rows = tbody.find('tr').text
+        if rowName in rows:
+            rows = tbody.find('td').text
+            for ch in rows:
+                if " " not in ch:
+                    mylist.append(ch.strip())
+
+    for i in mylist:
+        value = value + i
+    
+    return value;
+
+def starto():
     scrip = input("Enter your Scrip : ")
 
 
@@ -31,155 +47,30 @@ def startto():
     symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
     # print(symbol)
 
-    #EPS of the company 
-    getEps = ""
-    eps = ['E', 'P', 'S']
-    mylist = list()
-    filteredList = list()
-    for tbody in dataTable.find_all('tbody'):
-        rows = tbody.find('tr').text
-        if "EPS" in rows:
-            for ch in rows:
-                if " " not in ch:
-                    mylist.append(ch.strip())
-    for i in mylist:
-        if i not in eps:
-            filteredList.append(i)
-
-    for i in filteredList:
-        getEps = getEps + i
-    # print(getEps)     
-
-    #P/E Ratio
-    getPE = ""
-    peRatio = ['P', '/', 'E', 'R', 'a', 't', 'i', 'o']
-    mylist = list()
-    filteredList = list()
-    for tbody in dataTable.find_all('tbody'):
-        rows = tbody.find('tr').text
-        if "P/E" in rows:
-            for ch in rows:
-                if " " not in ch:
-                    mylist.append(ch.strip())
-    for i in mylist:
-        if i not in peRatio:
-            filteredList.append(i)
-
-    for i in filteredList:
-        getPE = getPE + i
-    # print(getPE)
+    sectorValue = getValue("Sector", dataTable)
+    epsValue = getValue("EPS", dataTable)
+    peValue = getValue("P/E Ratio", dataTable)
+    percentageChangeValue = getValue("% Change", dataTable)
+    dividendValue = getValue("% Dividend", dataTable)
+    bonusValue = getValue("% Bonus", dataTable)
+    rightShareValue = getValue("Righ Share", dataTable)
+    averageValue = getValue("120 Day Average", dataTable)
 
 
-    #Bonus
-    getBonus = ""
-    bonus = ['%', 'B', 'o', 'n', 'u', 's']
-    mylist = list()
-    filteredList = list()
-    for tbody in dataTable.find_all('tbody'):
-        rows = tbody.find('tr').text
-        if "Bonus" in rows:
-            for ch in rows:
-                if " " not in ch:
-                    mylist.append(ch.strip())
-    for i in mylist:
-        if i not in bonus:
-            filteredList.append(i)
 
-    for i in filteredList:
-        getBonus = getBonus + i
-    # print(getBonus)
-
-
-    #Dividend
-    getDividend = ""
-    dividend = ['%', 'D', 'i', 'v', 'i', 'd', 'e', 'n', 'd']
-    mylist = list()
-    filteredList = list()
-    for tbody in dataTable.find_all('tbody'):
-        rows = tbody.find('tr').text
-        if "Dividend" in rows:
-            for ch in rows:
-                if " " not in ch:
-                    mylist.append(ch.strip())
-    for i in mylist:
-        if i not in dividend:
-            filteredList.append(i)
-
-    for i in filteredList:
-        getDividend = getDividend + i
-    # print(getDividend)
-
-
-    #RightShare
-    getRShare = ""
-    rightShare = ['R','i','g','h','t','S','h','a','r','e']
-    mylist = list()
-    filteredList = list()
-    for tbody in dataTable.find_all('tbody'):
-        rows = tbody.find('tr').text
-        if "RightShare" in rows:
-            for ch in rows:
-                if " " not in ch:
-                    mylist.append(ch.strip())
-    for i in mylist:
-        if i not in rightShare:
-            filteredList.append(i)
-
-    for i in filteredList:
-        getRShare = getRShare + i
-    # print(getRShare)
-
-    #Sector
-    getSector = ""
-    sector = ['S','e','c','t','o','r']
-    mylist = list()
-    filteredList = list()
-    for tbody in dataTable.find_all('tbody'):
-        rows = tbody.find('tr').text
-        if "Sector" in rows:
-            for ch in rows:
-                if " " not in ch:
-                    mylist.append(ch.strip())
-    for i in mylist:
-        if i not in sector:
-            filteredList.append(i)
-
-    for i in filteredList:
-        getSector = getSector + i
-    # print(getSector)
-
-    # #120 Average
-    # getAverage = ""
-    # average = ['1','2','0','D','a','y','A','v','e','r','a','g','e']
-    # mylist = list()
-    # filteredList = list()
-    # for tbody in dataTable.find_all('tbody'):
-    #     rows = tbody.find('tr').text
-    #     if "120 Day Average" in rows:
-    #         for ch in rows:
-    #             if " " not in ch:
-    #                 mylist.append(ch.strip())
-    # for i in mylist:
-    #     if i not in average:
-    #         filteredList.append(i)
-
-    # for i in filteredList:
-    #     getAverage = getAverage + i
-    # # print(getSector)
-
-    scripInsert =[companyName, symbol, getSector, marketPrice, getEps, getPE, getDividend, getBonus, getRShare, "UnderConstruction"]
-    worksheet.append_row(scripInsert)
+    # scripInsert =[companyName, symbol, getSector, marketPrice, getEps, getPE, getDividend, getBonus, getRShare, "UnderConstruction"]
+    # worksheet.append_row(scripInsert)
 
     print("Company name : " + companyName)
     print("Symbol       : " + symbol)
-    print("Sector       : " + getSector)
+    print("Sector       : " + sectorValue)
     print("Market Price : " + marketPrice)
-    print("EPS          : " + getEps)
-    print("P/E          : " + getPE)
-    print("Dividend     : " + getDividend + "%")
-    print("Bonus        : " + getBonus + "%")
-    print("Right Share  : " + getRShare)
-  #  print("120 Average  : " + getAverage)
+    print("EPS          : " + epsValue)
+    print("P/E          : " + peValue)
+    print("Dividend     : " + dividendValue + "%")
+    print("Bonus        : " + bonusValue + "%")
+    print("Right Share  : " + rightShareValue)
+    print("120 Average  : " + averageValue)
     print("Data Insesrted")
 
 
@@ -191,7 +82,7 @@ def startto():
 
 if __name__ == "__main__":
     while True:
-        startto()
-        wantToExit = input("Do you wish to quit? y/n? : ")
-        if(wantToExit.lower() == 'y'):
+        starto()
+        wantToExit = input("Add another company? y/n? : ")
+        if(wantToExit.lower() == 'n'):
             break
