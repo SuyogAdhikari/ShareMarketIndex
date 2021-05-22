@@ -23,7 +23,7 @@ def getValue(rowName, dataTable):
     for i in mylist:
         value = value + i
     
-    return value;
+    return value
 
 def starto():
     scrip = input("Enter your Scrip : ")
