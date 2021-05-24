@@ -1,6 +1,24 @@
 import requests
 from bs4 import BeautifulSoup
 import gspread
+import pyrebase
+
+# Firebase configuration if we are using this
+config ={
+    "apiKey": "AIzaSyAbHTO3Ufs5rI6QXS4MKMEoqQ7ei6gHiUU",
+    "authDomain": "sharemarketindex-2efa1.firebaseapp.com",
+    "projectId": "sharemarketindex-2efa1",
+    "storageBucket": "sharemarketindex-2efa1.appspot.com",
+    "messagingSenderId": "722529550315",
+    "appId": "1:722529550315:web:83ee0f88a5ca4d2833a3ae",
+    "measurementId": "G-TTX4S7FNRR",
+    "databaseURL": "https://sharemarketindex-2efa1-default-rtdb.asia-southeast1.firebasedatabase.app/"
+}
+
+# Connect to firebase
+firebase = pyrebase.initialize_app(config)
+dataBase = firebase.database()
+
 
 headers = {'User-Agent' : 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'}
 
@@ -73,8 +91,24 @@ def starto():
             averageValue = getValue("120 Day Average", dataTable)
 
             '''Inserts into google sheet'''
-            scripInsert =[companyName, symbol, sectorValue, marketPrice, epsValue, peValue, dividendValue, bonusValue, rightShareValue, averageValue]
-            worksheet.append_row(scripInsert)
+            # scripInsert =[companyName, symbol, sectorValue, marketPrice, epsValue, peValue, dividendValue, bonusValue, rightShareValue, averageValue]
+            # worksheet.append_row(scripInsert)
+
+            ''' Firebase Data insertion command ''' 
+            data = {
+                "CompanyName" : companyName, 
+                "Symbol" : symbol,
+                "Market Price" : marketPrice,
+                "EPS" : epsValue,
+                "PE" : peValue,
+                "Dividend" : dividendValue,
+                "Bonus" : bonusValue,
+                "RightShare" : rightShareValue,
+                "120 Average" : averageValue,
+            }
+
+            dataBase.child("Companies Info").child(symbol).set(data)
+
             count += 1
             print(count, ". Company name : " + companyName)
             # print("Symbol       : " + symbol)
