@@ -19,14 +19,15 @@ config ={
 firebase = pyrebase.initialize_app(config)
 dataBase = firebase.database()
 
-
-headers = {'User-Agent' : 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'}
-
-
+# Connect to sheets if needed
 gc = gspread.service_account(filename='credentials.json')
 sh = gc.open_by_key('1PtkNfz_youMtW7DQ5meMZNJGJ0aMz8V_wINLceilTjo')
 worksheet = sh.sheet1
 
+# Headers
+headers = {'User-Agent' : 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'}
+
+# return company's needed data
 def getValue(rowName, dataTable):
     value = ""
     mylist = list()
@@ -43,6 +44,7 @@ def getValue(rowName, dataTable):
     
     return value
 
+# Collet Data from the companies
 def starto():
     companiesUrl = "http://merolagani.com/LatestMarket.aspx"
     req = requests.get(companiesUrl, headers = headers)
@@ -129,6 +131,7 @@ def starto():
             # row = worksheet.row_values(rownum) 
             # worksheet.update
 
+# Main function
 if __name__ == "__main__":
     while True:
         starto()
