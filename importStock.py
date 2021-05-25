@@ -100,13 +100,13 @@ def starto():
             data = {
                 "CompanyName" : companyName, 
                 "Symbol" : symbol,
-                "Market Price" : marketPrice,
+                "MarketPrice" : marketPrice,
                 "EPS" : epsValue,
                 "PE" : peValue,
                 "Dividend" : dividendValue,
                 "Bonus" : bonusValue,
                 "RightShare" : rightShareValue,
-                "120 Average" : averageValue,
+                "Average" : averageValue,
             }
 
             dataBase.child("Companies Info").child(symbol).set(data)
