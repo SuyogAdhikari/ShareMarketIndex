@@ -5,10 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share Market Index</title>
+    <style>
+    th{
+
+        border-spacing: 0 1em;
+    }
+
+        table,th,td
+    {
+        border-collapse:collapse; 
+  border-color: antiquewhite;
+      border:2px solid red;
+    }
+    
+
+    </style>
 </head>
 <body>
-    <table>
+    <table id="mainTable">
         <thead>
+            <th>No.</th>
             <th>Company Name</th>
             <th>Symbol</th>
             <th>Market Price</th>
@@ -21,26 +37,14 @@
         </thead>
 
         <tbody id="tbody">
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
         </tbody>
     </table>
     
-    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-analytics.js"></script>
+   
 
     <!--Firebase Libraries-->
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
 
