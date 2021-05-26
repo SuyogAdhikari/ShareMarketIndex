@@ -37,6 +37,8 @@ def getValue(rowName, dataTable):
             rows = tbody.find('td').text
             for ch in rows:
                 if " " not in ch:
+                    if "(" in ch:
+                        break
                     mylist.append(ch.strip())
 
     for i in mylist:
