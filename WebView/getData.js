@@ -22,9 +22,10 @@ var counter = 1;
 var DataJSON = []
     ref.orderByChild("CompanyName").once("value", function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-         var childData =  childSnapshot.val();
+        var childData =  childSnapshot.val();
         var CompanyName = childData.CompanyName;
         var Symbol = childData.Symbol;
+        var Sector = childData.Sector;
         var MarketPrice = parseFloat(String(childData.MarketPrice).replace(/,/g, ''));
         var EPS = childData.EPS
         var PE = childData.PE
@@ -34,9 +35,8 @@ var DataJSON = []
         var Average = parseFloat(String(childData.Average).replace(/,/g, ''));
         if(CompanyName)
         {
-            DataJSON.push({CompanyName,Symbol,MarketPrice,EPS,PE,Dividend,Bonus,RightShare,Average});
-            addItemsToTable(childData.CompanyName,childData.Symbol,childData.MarketPrice,childData.EPS,childData.PE,childData.Dividend,childData.Bonus,childData.RightShare,childData.Average);
-         
+            DataJSON.push({CompanyName,Symbol,Sector,MarketPrice,EPS,PE,Dividend,Bonus,RightShare,Average});
+            addItemsToTable(childData.CompanyName,childData.Symbol,childData.Sector,childData.MarketPrice,childData.EPS,childData.PE,childData.Dividend,childData.Bonus,childData.RightShare,childData.Average);
         }
     });
        
@@ -54,6 +54,32 @@ var DataJSON = []
                 addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
             }
     }
+
+    function filterEPS()
+    {
+        table.innerHTML ="";
+        counter=1;
+            DataJSON.sort(function(a, b) {
+                return (a.EPS) - (b.EPS);
+            });
+            for(i=0;i<DataJSON.length;i++)
+            {
+                addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+            }
+    }
+
+    function filterPE()
+    {
+        table.innerHTML ="";
+        counter=1;
+            DataJSON.sort(function(a, b) {
+                return (a.PE) - (b.PE);
+            });
+            for(i=0;i<DataJSON.length;i++)
+            {
+                addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+            }
+    }
    
     function filterMarketPrice()
     {
@@ -64,18 +90,19 @@ var DataJSON = []
         });
         for(i=0;i<DataJSON.length;i++)
         {
-            addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+            addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DATAJSON[i].Sector,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
         }
     }
     
     
      
-       function addItemsToTable(cName,cSymbol,cMarketPrice,cEPS,cPE,cDividend,cBonus,cRightShare,cAverage)
+       function addItemsToTable(cName,cSymbol,cSector,cMarketPrice,cEPS,cPE,cDividend,cBonus,cRightShare,cAverage)
        {
         var row = table.insertRow(-1);
         var sn = row.insertCell(-1);
         var companyName = row.insertCell(-1);
         var Symbol = row.insertCell(-1);
+        var Sector = row.insertCell(-1);
         var MarketPrice = row.insertCell(-1);
         var EPS = row.insertCell(-1);
         var PE = row.insertCell(-1);
@@ -87,6 +114,7 @@ var DataJSON = []
         sn.innerHTML = counter++;
         companyName.innerHTML = cName;
         Symbol.innerHTML = cSymbol;
+        Sector.innerHTML = cSector;
         MarketPrice.innerHTML = cMarketPrice;
         EPS.innerHTML = cEPS;
         PE.innerHTML = cPE;

@@ -102,6 +102,7 @@ def starto():
             data = {
                 "CompanyName" : companyName, 
                 "Symbol" : symbol,
+                "Sector" : sectorValue,
                 "MarketPrice" : marketPrice,
                 "EPS" : epsValue,
                 "PE" : peValue,
