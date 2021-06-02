@@ -23,7 +23,6 @@ $(document).ready(function(){
     var table = $('.mydatatable').DataTable({
         searching: true,
         ordering: true,
-        lengthChange: true,
         lengthMenu : [[50,100,150,-1][50,100,150,'All']]
     });
 
