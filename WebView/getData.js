@@ -17,6 +17,8 @@ firebase.initializeApp(firebaseConfig);
 
 // ---------------------------------------- GET DATA FROM FIREBASE -------------------------------------
 
+
+// Not efficient methodd.... Use DataTable it will sort search list filter everything...  
 var ref = firebase.database().ref("Companies Info");
 var counter = 1;
 var DataJSON = []
@@ -51,7 +53,17 @@ var DataJSON = []
             });
             for(i=0;i<DataJSON.length;i++)
             {
-                addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+                addItemsToTable(
+                    DataJSON[i].CompanyName,
+                    DataJSON[i].Symbol,
+                    DataJSON[i].MarketPrice,
+                    DataJSON[i].EPS,
+                    DataJSON[i].PE,
+                    DataJSON[i].Dividend,
+                    DataJSON[i].Bonus,
+                    DataJSON[i].RightShare,
+                    DataJSON[i].Average
+                );
             }
     }
 
@@ -64,7 +76,17 @@ var DataJSON = []
             });
             for(i=0;i<DataJSON.length;i++)
             {
-                addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+                addItemsToTable(
+                    DataJSON[i].CompanyName,
+                    DataJSON[i].Symbol,
+                    DataJSON[i].MarketPrice,
+                    DataJSON[i].EPS,
+                    DataJSON[i].PE,
+                    DataJSON[i].Dividend,
+                    DataJSON[i].Bonus,
+                    DataJSON[i].RightShare,
+                    DataJSON[i].Average
+                );
             }
     }
 
@@ -77,7 +99,17 @@ var DataJSON = []
             });
             for(i=0;i<DataJSON.length;i++)
             {
-                addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+                addItemsToTable(
+                    DataJSON[i].CompanyName,
+                    DataJSON[i].Symbol,
+                    DataJSON[i].MarketPrice,
+                    DataJSON[i].EPS,
+                    DataJSON[i].PE,
+                    DataJSON[i].Dividend,
+                    DataJSON[i].Bonus,
+                    DataJSON[i].RightShare,
+                    DataJSON[i].Average
+                );
             }
     }
    
@@ -90,7 +122,17 @@ var DataJSON = []
         });
         for(i=0;i<DataJSON.length;i++)
         {
-            addItemsToTable(DataJSON[i].CompanyName,DataJSON[i].Symbol,DATAJSON[i].Sector,DataJSON[i].MarketPrice,DataJSON[i].EPS,DataJSON[i].PE,DataJSON[i].Dividend,DataJSON[i].Bonus,DataJSON[i].RightShare,DataJSON[i].Average);
+            addItemsToTable(
+                DataJSON[i].CompanyName,
+                DataJSON[i].Symbol,
+                DataJSON[i].MarketPrice,
+                DataJSON[i].EPS,
+                DataJSON[i].PE,
+                DataJSON[i].Dividend,
+                DataJSON[i].Bonus,
+                DataJSON[i].RightShare,
+                DataJSON[i].Average
+            );
         }
     }
     
