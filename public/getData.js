@@ -23,7 +23,7 @@ $(document).ready(function(){
     var table = $('.mydatatable').DataTable({
         searching: true,
         ordering: true,
-        lengthMenu : [[50,100,150,-1][50,100,150,'All']]
+        lengthMenu : [[50,100,150,-1],[50,100,150,'All']]
     });
 
     ref.orderByChild("CompanyName").once("value", function(snapshot) {
