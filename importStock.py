@@ -81,18 +81,18 @@ def starto():
 
             # Gets the recent market price of the company
             marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
-
+            marketPrice = float(re.sub(",", "", marketPrice))
             #Gets the company's symbol 
             symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
 
             sectorValue = getValue("Sector", dataTable)
-            epsValue = getValue("EPS", dataTable)
-            peValue = getValue("P/E Ratio", dataTable)
+            epsValue = float(re.sub(",", "", getValue("EPS", dataTable)))
+            peValue = float(re.sub(",", "", getValue("P/E Ratio", dataTable)))
             percentageChangeValue = getValue("% Change", dataTable)
             dividendValue = getValue("% Dividend", dataTable)
             bonusValue = getValue("% Bonus", dataTable)
             rightShareValue = getValue("Right Share", dataTable)
-            averageValue = getValue("120 Day Average", dataTable)
+            averageValue = float(re.sub(",", "", getValue("120 Day Average", dataTable)))
 
             '''Inserts into google sheet'''
             # scripInsert =[companyName, symbol, sectorValue, marketPrice, epsValue, peValue, dividendValue, bonusValue, rightShareValue, averageValue]
