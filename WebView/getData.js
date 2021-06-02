@@ -18,12 +18,13 @@ firebase.initializeApp(firebaseConfig);
 // ---------------------------------------- GET DATA FROM FIREBASE -------------------------------------
 
 
-// Not efficient methodd.... Use DataTable it will sort search list filter everything...  
-
-
 $(document).ready(function(){
     var ref = firebase.database().ref("Companies Info");
-    var table = $('.mydatatable').DataTable();
+    var table = $('.mydatatable').DataTable({
+        searching: true,
+        ordering: true,
+        lengthChange: true
+    });
 
     ref.orderByChild("CompanyName").once("value", function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
@@ -37,15 +38,9 @@ $(document).ready(function(){
         }
     });
        
-})
+})    
 
-        $('.mydatatable').DataTable({
-            searching: true,
-            ordering: true,
-            lengthChange: true
-        });
-
-    });  
+});  
  
 
 
