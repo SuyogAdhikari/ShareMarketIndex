@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import gspread
 import pyrebase
-
+import re
 # Firebase configuration if we are using this
 config ={
     "apiKey": "AIzaSyAbHTO3Ufs5rI6QXS4MKMEoqQ7ei6gHiUU",
