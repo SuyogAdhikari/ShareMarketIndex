@@ -19,11 +19,6 @@ config ={
 firebase = pyrebase.initialize_app(config)
 dataBase = firebase.database()
 
-# Connect to sheets if needed
-gc = gspread.service_account(filename='credentials.json')
-sh = gc.open_by_key('1PtkNfz_youMtW7DQ5meMZNJGJ0aMz8V_wINLceilTjo')
-worksheet = sh.sheet1
-
 # Headers
 headers = {'User-Agent' : 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'}
 
@@ -78,7 +73,6 @@ def starto():
             #finds the data table where the needed informations are stored in
             dataTable = soup.find('table', {'id' : 'accordion'})
 
-
             # Gets the recent market price of the company
             marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
             marketPrice = float(re.sub(",", "", marketPrice))
@@ -92,15 +86,11 @@ def starto():
             dividendValue = getValue("% Dividend", dataTable)
             bonusValue = getValue("% Bonus", dataTable)
             rightShareValue = getValue("Right Share", dataTable)
-            averageValue = float(re.sub(",", "", getValue("120 Day Average", dataTable)))
+            averageValue = float(re.sub(",", "", getValue("120 Day Average", dataTable)))            
 
-            '''Inserts into google sheet'''
-            # scripInsert =[companyName, symbol, sectorValue, marketPrice, epsValue, peValue, dividendValue, bonusValue, rightShareValue, averageValue]
-            # worksheet.append_row(scripInsert)
-
-            ''' Firebase Data insertion command ''' 
+            ''' Firebase Data insertion command''' 
             data = {
-                "CompanyName" : companyName, 
+                "CompanyName" : companyName.replace(" ",""), 
                 "Symbol" : symbol,
                 "Sector" : sectorValue,
                 "MarketPrice" : marketPrice,
@@ -111,7 +101,6 @@ def starto():
                 "RightShare" : rightShareValue,
                 "Average" : averageValue,
             }
-
             dataBase.child("Companies Info").child(symbol).set(data)
 
             count += 1
@@ -126,13 +115,6 @@ def starto():
             # print("Right Share  : " + rightShareValue)
             # print("120 Average  : " + averageValue)
             # print("Data Insesrted")
-
-
-            #Searches the row for given symbol
-            # test = worksheet.col_values(2)
-            # rownum = test.index(symbol) + 1
-            # row = worksheet.row_values(rownum) 
-            # worksheet.update
 
 # Main function
 if __name__ == "__main__":

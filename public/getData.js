@@ -21,8 +21,6 @@ firebase.initializeApp(firebaseConfig);
 $(document).ready(function(){
     var ref = firebase.database().ref("Companies Info");
     var table = $('.mydatatable').DataTable({
-        searching: true,
-        ordering: true,
         lengthMenu : [[50,100,150,-1],[50,100,150,'All']]
     });
 
