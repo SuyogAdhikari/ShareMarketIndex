@@ -1,9 +1,12 @@
+# Import various libraries 
 import requests
 from bs4 import BeautifulSoup
 import gspread
 import pyrebase
 import re
-# Firebase configuration if we are using this
+
+
+# Firebase Database configuration if we are using this (Fuck google sheets)
 config ={
     "apiKey": "AIzaSyAbHTO3Ufs5rI6QXS4MKMEoqQ7ei6gHiUU",
     "authDomain": "sharemarketindex-2efa1.firebaseapp.com",
@@ -15,11 +18,11 @@ config ={
     "databaseURL": "https://sharemarketindex-2efa1-default-rtdb.asia-southeast1.firebasedatabase.app/"
 }
 
-# Connect to firebase
+# Connect to firebase database
 firebase = pyrebase.initialize_app(config)
 dataBase = firebase.database()
 
-# Headers
+# Headers (i dunno why this is written here but mehh)
 headers = {'User-Agent' : 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:88.0) Gecko/20100101 Firefox/88.0'}
 
 # return company's needed data
@@ -76,9 +79,11 @@ def starto():
             # Gets the recent market price of the company
             marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
             marketPrice = float(re.sub(",", "", marketPrice))
+
             #Gets the company's symbol 
             symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
 
+            #this is our maal .... datas are here... Create issue if needed other datas
             sectorValue = getValue("Sector", dataTable)
             epsValue = float(re.sub(",", "", getValue("EPS", dataTable)))
             peValue = float(re.sub(",", "", getValue("P/E Ratio", dataTable)))
@@ -88,7 +93,7 @@ def starto():
             rightShareValue = getValue("Right Share", dataTable)
             averageValue = float(re.sub(",", "", getValue("120 Day Average", dataTable)))            
 
-            ''' Firebase Data insertion command''' 
+            # Firebase Data insertion command
             data = {
                 "CompanyName" : companyName.replace(" ",""), 
                 "Symbol" : symbol,
