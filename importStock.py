@@ -94,6 +94,7 @@ def starto():
                 "Symbol" : symbol,
                 "Sector" : sectorValue,
                 "MarketPrice" : marketPrice,
+                "Percentage Change" : percentageChangeValue,
                 "EPS" : epsValue,
                 "PE" : peValue,
                 "Dividend" : dividendValue,
