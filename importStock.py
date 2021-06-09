@@ -46,7 +46,9 @@ def getValue(rowName, dataTable):
 
 # Collet Data from the companies
 def starto():
-    companiesUrl = "http://merolagani.com/LatestMarket.aspx"
+    comp = dataBase.child("Urls").child("companies").get()
+    companyData = dataBase.child("Urls").child("companiesData").get()
+    companiesUrl = comp.val()
     req = requests.get(companiesUrl, headers = headers)
     companySoup = BeautifulSoup(req.text, 'html.parser')
 
@@ -66,7 +68,7 @@ def starto():
     count = 0
     for companies in myCompanies:
         for scrip in companies:
-            url = "https://merolagani.com/CompanyDetail.aspx?symbol=" + scrip
+            url = companyData.val() + scrip
             r = requests.get(url, headers = headers)
             soup = BeautifulSoup(r.text, 'html.parser')
 
