@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import gspread
 import pyrebase
 import re
+import sys
 
 
 # Firebase Database configuration if we are using this (Fuck google sheets)
@@ -53,7 +54,12 @@ def starto():
     companySoup = BeautifulSoup(req.text, 'html.parser')
 
     #retrieve companies
-    companyDataTable = companySoup.find('table', {'data-live' : 'live-trading'})
+    if(req.status_code == 200):
+        print ("Website (for symbol) says : %s \n" % req.status_code)
+        companyDataTable = companySoup.find('table', {'data-live' : 'live-trading'})
+    else:
+         print ("Some Error occured while retriving stock symbol, \n Please try again later  \n Website says : %s " % req.status_code) 
+         sys.exit()       
 
     with open("companies.txt", 'w') as file:
         tbody = companyDataTable.find('tbody')
@@ -72,57 +78,66 @@ def starto():
             r = requests.get(url, headers = headers)
             soup = BeautifulSoup(r.text, 'html.parser')
 
-            # Gets Company Name from MeroLagani website and selects the table on the left side that has the company's share details
-            companyName = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_companyName'}).text
+            if r.status_code == 200:
+                # Gets Company Name from MeroLagani website and selects the table on the left side that has the company's share details
+                try:
+                    companyName = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_companyName'}).text
+                    #finds the data table where the needed informations are stored in
+                    dataTable = soup.find('table', {'id' : 'accordion'})
 
-            #finds the data table where the needed informations are stored in
-            dataTable = soup.find('table', {'id' : 'accordion'})
+                    # Gets the recent market price of the company
+                    marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
+                    marketPrice = float(re.sub(",", "", marketPrice))
 
-            # Gets the recent market price of the company
-            marketPrice = soup.find('span', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_lblMarketPrice'}).text
-            marketPrice = float(re.sub(",", "", marketPrice))
+                    #Gets the company's symbol 
+                    symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
+                
+                except AttributeError:
+                    print("\n********* Couldnot retrive Data from : %s (ATTRIBUTE ERROR) ***********\n" % scrip)
 
-            #Gets the company's symbol 
-            symbol = soup.find('input', {'id' : 'ctl00_ContentPlaceHolder1_CompanyDetail1_StockGraph1_hdnStockSymbol'})['value']
+                
 
-            #this is our maal .... datas are here... Create issue if needed other datas
-            sectorValue = getValue("Sector", dataTable)
-            epsValue = float(re.sub(",", "", getValue("EPS", dataTable)))
-            peValue = float(re.sub(",", "", getValue("P/E Ratio", dataTable)))
-            percentageChangeValue = getValue("% Change", dataTable)
-            dividendValue = getValue("% Dividend", dataTable)
-            bonusValue = getValue("% Bonus", dataTable)
-            rightShareValue = getValue("Right Share", dataTable)
-            averageValue = float(re.sub(",", "", getValue("120 Day Average", dataTable)))            
+                #this is our maal .... datas are here... Create issue if needed other datasn
+                sectorValue = getValue("Sector", dataTable)
+                epsValue = float(re.sub(",", "", getValue("EPS", dataTable)))
+                peValue = float(re.sub(",", "", getValue("P/E Ratio", dataTable)))
+                percentageChangeValue = getValue("% Change", dataTable)
+                dividendValue = getValue("% Dividend", dataTable)
+                bonusValue = getValue("% Bonus", dataTable)
+                rightShareValue = getValue("Right Share", dataTable)
+                averageValue = float(re.sub(",", "", getValue("120 Day Average", dataTable)))            
 
-            # Firebase Data insertion command
-            data = {
-                "CompanyName" : companyName.replace(" ",""), 
-                "Symbol" : symbol,
-                "Sector" : sectorValue,
-                "MarketPrice" : marketPrice,
-                "Percentage Change" : percentageChangeValue,
-                "EPS" : epsValue,
-                "PE" : peValue,
-                "Dividend" : dividendValue,
-                "Bonus" : bonusValue,
-                "RightShare" : rightShareValue,
-                "Average" : averageValue,
-            }
-            dataBase.child("Companies Info").child(symbol).set(data)
+                # Firebase Data insertion command
+                data = {
+                    "CompanyName" : companyName.replace(" ",""), 
+                    "Symbol" : symbol,
+                    "Sector" : sectorValue,
+                    "MarketPrice" : marketPrice,
+                    "Percentage Change" : percentageChangeValue,
+                    "EPS" : epsValue,
+                    "PE" : peValue,
+                    "Dividend" : dividendValue,
+                    "Bonus" : bonusValue,
+                    "RightShare" : rightShareValue,
+                    "Average" : averageValue,
+                }
+                dataBase.child("Companies Info").child(symbol).set(data)
 
-            count += 1
-            print(count, ". Company name : " + companyName)
-            # print("Symbol       : " + symbol)
-            # print("Sector       : " + sectorValue)
-            # print("Market Price : " + marketPrice)
-            # print("EPS          : " + epsValue)
-            # print("P/E          : " + peValue)
-            # print("Dividend     : " + dividendValue + "%")
-            # print("Bonus        : " + bonusValue + "%")
-            # print("Right Share  : " + rightShareValue)
-            # print("120 Average  : " + averageValue)
-            # print("Data Insesrted")
+                count += 1
+                print(count, ". Company name : " + companyName)
+                # print("Symbol       : " + symbol)
+                # print("Sector       : " + sectorValue)
+                # print("Market Price : " + marketPrice)
+                # print("EPS          : " + epsValue)
+                # print("P/E          : " + peValue)
+                # print("Dividend     : " + dividendValue + "%")
+                # print("Bonus        : " + bonusValue + "%")
+                # print("Right Share  : " + rightShareValue)
+                # print("120 Average  : " + averageValue)
+                # print("Data Insesrted")
+            else:
+                print("Some Error occured while retriving stock data, \n Please try again later  \n Website says : %s " % r.status_code)
+                sys.exit()
 
 # Main function
 if __name__ == "__main__":
