@@ -22,7 +22,7 @@ body {
     background-color: #f4f4f4;
   }
   
-  a {
+  a{
     color: #fff;
   }
   
@@ -158,3 +158,9 @@ body {
     }
   }
   
+  .lastUpdated{
+    float: right;
+    font-weight: bolder;
+    font-size : 14px;
+    margin-right: 10px;
+  }

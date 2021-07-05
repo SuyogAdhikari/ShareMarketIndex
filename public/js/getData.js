@@ -26,20 +26,25 @@ $(document).ready(function(){
 
     ref.orderByChild("CompanyName").once("value", function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
-        var childData =  childSnapshot.val();
-        var CompanyName = childData.CompanyName;
-   
-        if(CompanyName)
-        {
-            var dataSet = [childData.CompanyName,childData.Symbol,childData.Sector,childData.MarketPrice,childData.EPS,childData.PE,childData.Dividend,childData.Bonus,childData.RightShare,childData.Average];
-            table.rows.add([dataSet]).draw();
-        }
-    });
-       
-})    
+            var childData =  childSnapshot.val();
+            var CompanyName = childData.CompanyName;
+    
+            if(CompanyName)
+            {
+                var dataSet = [childData.CompanyName,childData.Symbol,childData.Sector,childData.MarketPrice,childData.EPS,childData.PE,childData.Dividend,childData.Bonus,childData.RightShare,childData.Average];
+                table.rows.add([dataSet]).draw();
+            }
+        });       
+    })  
 
-});  
- 
+    var date = firebase.database().ref("Date");
 
-
- 
+    date.once("value", function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            var childData =  childSnapshot.val();
+            var LastUpdated = childData.LastUpdated;  
+            console.log(childData);  
+            document.getElementById("date").innerHTML = childData;
+        })    
+    }); 
+})

@@ -5,6 +5,7 @@ import gspread
 import pyrebase
 import re
 import sys
+from datetime import datetime
 
 
 # Firebase Database configuration if we are using this (Fuck google sheets)
@@ -70,6 +71,12 @@ def starto():
     with open("companies.txt", 'r') as file:
         data = file.read()
         myCompanies.append(data.split())
+
+      # get last updated date and time
+        now = datetime.now()
+        dt_string = now.strftime("%d/%b/%Y %H:%M %p")
+        print("date and time = ", dt_string)
+        dataBase.child("Date").child("LastUpdated").set(dt_string)
 
     count = 0
     for companies in myCompanies:
