@@ -36,6 +36,13 @@ body {
     z-index: 3;
     color: rgb(0, 0, 0);
   }
+   
+  .lastUpdated{
+    float: right;
+    font-weight: bolder;
+    font-size : 14px;
+    margin-right: 10px;
+  }
   
   .header ul {
     margin: 0;
@@ -157,10 +164,4 @@ body {
       display: none;
     }
   }
-  
-  .lastUpdated{
-    float: right;
-    font-weight: bolder;
-    font-size : 14px;
-    margin-right: 10px;
-  }
+ 
