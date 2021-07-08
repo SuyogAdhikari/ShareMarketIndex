@@ -74,7 +74,7 @@ def starto():
 
       # get last updated date and time
         now = datetime.now()
-        dt_string = now.strftime("%d/%b/%Y %a %H:%M %p")
+        dt_string = now.strftime("%d/%b/%Y %a %I:%M %p")
         print("date and time = ", dt_string)
         dataBase.child("Date").child("LastUpdated").set(dt_string)
 
