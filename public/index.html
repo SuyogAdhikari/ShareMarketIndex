@@ -25,10 +25,12 @@
         </header>
 <br>       
 <br><br>
-        <div class="container col-md-12">
-            <div class="lastUpdated text-right" style= "font-weight: bolder;font-size : 14px;">
+        
+        <div class="container col-md-12 text-right">            
+            <div class="lastUpdated mt-2" style= "font-weight: bolder;font-size : 14px;">
                 <span>Last Updated : </span><span id="date"></span>
             </div>
+            <Button type="button" class="btn btn-dark pull-right mt-3" onClick="sendNotification()">Request for data update</Button>
         </div>
 
 
@@ -70,6 +72,7 @@
         <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-analytics.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script> 
+        <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-messaging.js"></script>  
 
         <!-- Custom JS -->
         <script src="js/getData.js"></script>
