@@ -21,7 +21,8 @@ firebase.initializeApp(firebaseConfig);
 $(document).ready(function(){
     var ref = firebase.database().ref("Companies Info");
     var table = $('.mydatatable').DataTable({
-        lengthMenu : [[50,100,150,-1],[50,100,150,'All']]
+        lengthMenu : [[50,100,150,-1],[50,100,150,'All']],
+        scrollToTop : true
     });
 
     ref.orderByChild("CompanyName").once("value", function(snapshot) {
@@ -48,3 +49,5 @@ $(document).ready(function(){
         })    
     }); 
 })
+
+
