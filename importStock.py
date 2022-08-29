@@ -1,7 +1,6 @@
 # Import various libraries 
 import requests
 from bs4 import BeautifulSoup
-import gspread
 import pyrebase
 import re
 import sys
